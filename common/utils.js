@@ -7,6 +7,17 @@ utils.flaggedSamples = [
   2811, 2812, 5729, 5730, 5731, 5733, 5734, 5732, 5735, 5736,
 ];
 
+utils.classes = [
+  "car",
+  "fish",
+  "house",
+  "tree",
+  "bicycle",
+  "guitar",
+  "pencil",
+  "clock",
+];
+
 utils.styles = {
   car: { color: "gray", text: "🚗" },
   fish: { color: "red", text: "🐠" },
