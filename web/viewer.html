@@ -112,6 +112,8 @@
       const chart = new Chart(
         chartContainer,
         trainingSamples,
+        // fixing largely mis-labeled house as clock
+        <!-- testingSamples.filter((s) => s.truth == "house" && s.label == "clock"), -->
         options,
         handleClick
       );
