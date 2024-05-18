@@ -107,6 +107,10 @@ class Confusion {
           cell.style.backgroundPosition = "50% 20%";
           cell.style.verticalAlign = "bottom";
           cell.style.fontWeight = "bold";
+          const p = (2 * this.matrix[i][j]) / this.matrix[j][i];
+          const R = p >= 0 ? p * 255 : 0;
+          const B = p <= 0 ? -p * 255 : 0;
+          cell.style.color = `rgb(${R},0,${B})`;
         }
 
         // add item icon to each classes left column
