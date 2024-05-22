@@ -130,7 +130,7 @@ geometry.minimumBoundingBox = ({ points, hull }) => {
     const area = width * height;
     if (area < minArea) {
       minArea = area;
-      result = { vertices, width, height };
+      result = { vertices, width, height, hull };
     }
   }
   return result;
