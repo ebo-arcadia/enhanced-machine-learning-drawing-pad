@@ -117,6 +117,14 @@ geometry.coincidentBox = (hull, i, j) => {
 
 // determines the minimum (area) bounding box for a given hull (or set of points)
 geometry.minimumBoundingBox = ({ points, hull }) => {
+  if (points.length < 3) {
+    return {
+      width: 0,
+      height: 0,
+      vertices: points,
+      hull: points,
+    };
+  }
   hull = hull || geometry.grahamScan(points);
 
   let minArea = Number.MAX_VALUE;
