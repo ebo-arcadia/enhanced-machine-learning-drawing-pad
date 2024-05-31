@@ -1,6 +1,9 @@
 if (typeof geometry === "undefined") {
   geometry = require("./geometry.js");
 }
+if (typeof draw === "undefined") {
+  draw = require("./draw.js");
+}
 
 const featureFunctions = {};
 
@@ -39,6 +42,27 @@ featureFunctions.getRoundness = (paths) => {
   const points = paths.flat();
   const { hull } = geometry.minimumBoundingBox({ points });
   return geometry.roundness(hull);
+};
+
+featureFunctions.getPixels = (paths, size = 400) => {
+  let canvas = null;
+  try {
+    // for web
+    canvas = document.createElement("canvas");
+    canvas.width = size;
+    canvas.height = size;
+  } catch (error) {
+    // for node
+    const { createCanvas } = require("../node/node_modules/canvas");
+    canvas = createCanvas(size, size);
+  }
+
+  const ctx = canvas.getContext("2d");
+
+  draw.paths(ctx, paths);
+
+  const imgData = ctx.getImageData(0, 0, size, size);
+  return imgData.data.filter((val, index) => index % 4 == 3);
 };
 
 featureFunctions.inUse = [
