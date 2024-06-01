@@ -44,7 +44,7 @@ featureFunctions.getRoundness = (paths) => {
   return geometry.roundness(hull);
 };
 
-featureFunctions.getPixels = (paths, size = 400) => {
+featureFunctions.getPixels = (paths, size = 400, expand = true) => {
   let canvas = null;
   try {
     // for web
@@ -59,10 +59,36 @@ featureFunctions.getPixels = (paths, size = 400) => {
 
   const ctx = canvas.getContext("2d");
 
-  draw.paths(ctx, paths);
+  if (expand) {
+    const points = paths.flat();
+
+    const bounds = {
+      left: Math.min(...points.map((p) => p[0])),
+      right: Math.max(...points.map((p) => p[0])),
+      top: Math.min(...points.map((p) => p[1])),
+      bottom: Math.max(...points.map((p) => p[1])),
+    };
+
+    const newPaths = [];
+    for (const path of paths) {
+      const newPoints = path.map((p) => [
+        utils.invLerp(bounds.left, bounds.right, p[0]) * size,
+        utils.invLerp(bounds.top, bounds.bottom, p[1]) * size,
+      ]);
+      newPaths.push(newPoints);
+    }
+    draw.paths(ctx, newPaths);
+  } else {
+    draw.paths(ctx, paths);
+  }
 
   const imgData = ctx.getImageData(0, 0, size, size);
   return imgData.data.filter((val, index) => index % 4 == 3);
+};
+
+featureFunctions.getComplexity = (paths) => {
+  const pixels = featureFunctions.getPixels(paths);
+  return pixels.filter((a) => a != 0).length;
 };
 
 featureFunctions.inUse = [
@@ -72,6 +98,7 @@ featureFunctions.inUse = [
   { name: "Height", function: featureFunctions.getHeight },
   { name: "Elongation", function: featureFunctions.getElongation },
   { name: "Roundness", function: featureFunctions.getRoundness },
+  { name: "Complexity", function: featureFunctions.getComplexity },
 ];
 
 if (typeof module !== "undefined") {

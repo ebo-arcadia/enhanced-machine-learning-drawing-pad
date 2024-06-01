@@ -69,6 +69,17 @@ function generateImageFile(outFile, paths) {
   draw.paths(ctx, paths);
 
   const pixels = featureFunctions.getPixels(paths);
+  const size = Math.sqrt(pixels.length);
+  const imgData = ctx.getImageData(0, 0, size, size);
+  for (let i = 0; i < pixels.length; i++) {
+    const alpha = pixels[i];
+    const startIndex = i * 4;
+    imgData.data[startIndex] = 0;
+    imgData.data[startIndex + 1] = 0;
+    imgData.data[startIndex + 2] = 0;
+    imgData.data[startIndex + 3] = alpha;
+  }
+  ctx.putImageData(imgData, 0, 0);
 
   const complexity = pixels.filter((a) => a != 0).length;
   draw.text(ctx, complexity, "blue");
