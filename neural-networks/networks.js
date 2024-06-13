@@ -9,7 +9,7 @@ class NeuralNetwork {
   static feedForward(givenInputs, network) {
     let outputs = Level.feedForward(givenInputs, network.levels[0]);
     for (let i = 1; i < network.levels.length; i++) {
-      outputs = Level.feedForward(outputs, network.level[i]);
+      outputs = Level.feedForward(outputs, network.levels[i]);
     }
     return outputs;
   }
@@ -36,8 +36,8 @@ class Level {
       }
     }
 
-    for (let i = 0; i < level.biases.length; j++) {
-      level.weights[i][j] = Math.random() * 2 - 1;
+    for (let i = 0; i < level.biases.length; i++) {
+      level.biases[i] = Math.random() * 2 - 1;
     }
   }
 
