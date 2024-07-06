@@ -15,6 +15,9 @@ const mlp = new MLP(
   [trainingSamples[0].point.length, utils.classes.length],
   utils.classes
 );
+mlp.fit(trainingSamples, 5000);
+fs.writeFileSync(constants.MODEL, JSON.stringify(mlp));
+fs.writeFileSync(constants.MODEL_JS, `const model = ${JSON.stringify(mlp)}`);
 
 const { samples: testingSamples } = JSON.parse(
   fs.readFileSync(constants.TESTING)

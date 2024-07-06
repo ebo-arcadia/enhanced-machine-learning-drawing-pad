@@ -17,6 +17,31 @@ class MLP {
     const label = this.classes[index];
     return { label };
   }
+
+  fit(samples, tries = 1000) {
+    let bestNetwork = this.network;
+    let bestAccuracy = this.evaluate(samples);
+    for (let i = 0; i < tries; i++) {
+      this.network = new NeuralNetwork(this.neuronCounts);
+      const accuracy = this.evaluate(samples);
+      if (accuracy > bestAccuracy) {
+        bestAccuracy = accuracy;
+        bestNetwork = this.network;
+      }
+    }
+    this.network = bestNetwork;
+  }
+
+  evaluate(samples) {
+    let correctCount = 0;
+    for (const sample of samples) {
+      const { label } = this.predict(sample.point);
+      const truth = sample.label;
+      correctCount += truth == label ? 1 : 0;
+    }
+    const accuracy = correctCount / samples.length;
+    return accuracy;
+  }
 }
 
 if (typeof module !== "undefined") {
