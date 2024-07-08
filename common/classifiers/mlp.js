@@ -1,7 +1,9 @@
-const NeuralNetwork = require("../network.js");
-
 if (typeof NeuralNetwork === "undefined") {
-  utils = require("../network.js");
+  NeuralNetwork = require("../network.js");
+}
+
+if (typeof utils === "undefined") {
+  utils = require("../utils.js");
 }
 
 class MLP {

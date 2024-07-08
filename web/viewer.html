@@ -24,6 +24,7 @@
     </div>
     <div id="chartContainer">
       <div id="confusionContainer"></div>
+      <canvas id="networkCanvas"></canvas>
     </div>
     <div id="controlPanel">
       <button onClick="toggleInput()">Toggle Input</button>
@@ -34,17 +35,21 @@
     <script src="../common/js_objects/training.js"></script>
     <script src="../common/js_objects/testing.js"></script>
     <script src="../common/js_objects/minMax.js"></script>
+    <script src="../common/js_objects/model.js"></script>
 
     <script src="../common/constants.js"></script>
     <script src="../common/utils.js"></script>
+    <script src="../common/network.js"></script>
     <script src="../common/geometry.js"></script>
     <script src="../common/draw.js"></script>
     <script src="../common/featureFunctions.js"></script>
     <script src="../common/classifiers/knn.js"></script>
+    <script src="../common/classifiers/mlp.js"></script>
 
     <script src="js/display.js"></script>
     <script src="js/sketchPad.js"></script>
     <script src="js/dataCleaner.js"></script>
+    <script src="js/visualizer.js"></script>
 
     <script src="./chart/graphics.js"></script>
     <script src="./chart/math.js"></script>
@@ -57,13 +62,21 @@
       const testingSamples = testing.samples;
 
       // Classifying the testing samples
-      const kNN = new KNN(trainingSamples);
+      // const kNN = new KNN(trainingSamples);
+      const mlp = new MLP([], []);
+      mlp.load(model);
+
+      networkCanvas.width = 500;
+      networkCanvas.height = 500;
+      const networkCtx = networkCanvas.getContext("2d");
+
       let correctCount = 0;
       let totalCount = 0;
       for (const testSample of testingSamples) {
         testSample.truth = testSample.label;
         testSample.label = "?";
-        const { label, nearestSamples } = kNN.predict(testSample.point);
+        // const { label, nearestSamples } = kNN.predict(testSample.point);
+        const { label, nearestSamples } = mlp.predict(testSample.point);
         testSample.label = label;
         testSample.nearestSamples = nearestSamples;
         testSample.correct = testSample.label == testSample.truth;
@@ -129,6 +142,9 @@
         options
       );
 
+      const outputLabels = Object.values(utils.styles).map((s) => s.image);
+      Visualizer.drawNetwork(networkCtx, mlp.network, outputLabels);
+
       // Initializing the Sketch Pad
       const sketchPad = new SketchPad(inputContainer, onDrawingUpdate);
       sketchPad.canvas.style.cssText +=
@@ -139,7 +155,9 @@
         const functions = featureFunctions.inUse.map((f) => f.function);
         point = functions.map((f) => f(paths));
         utils.normalizePoints([point], minMax);
-        const { label, nearestSamples } = kNN.predict(point);
+        // const { label, nearestSamples } = kNN.predict(point);
+        const { label, nearestSamples } = mlp.predict(point);
+        Visualizer.drawNetwork(networkCtx, mlp.network, outputLabels);
         predictedLabelContainer.innerHTML = "Is it a " + label + " ?";
         chart.showDynamicPoint(point, label, nearestSamples);
       }
