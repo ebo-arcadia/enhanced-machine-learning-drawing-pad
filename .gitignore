@@ -131,3 +131,5 @@ dist
 
 # exclude data folder
 data/
+sklearn-env/
+python/__pycache__/
