@@ -6,7 +6,8 @@ hidden = (10)
 mlp = MLPClassifier (
     hidden,
     max_iter=10000,
-    random_state=1
+    random_state=1,
+    activation = 'tanh'
 )
 
 X, y = readFeatureFile("/Users/ebolee/repo/enhanced-machine-learning-drawing-pad/data/dataset/training.csv")

@@ -20,9 +20,10 @@ if (fs.existsSync(constants.MODEL)) {
   mlp.load(JSON.parse(fs.readFileSync(constants.MODEL)));
 }
 
-mlp.fit(trainingSamples, 5000);
+mlp.fit(trainingSamples);
+
 fs.writeFileSync(constants.MODEL, JSON.stringify(mlp));
-fs.writeFileSync(constants.MODEL_JS, `const model = ${JSON.stringify(mlp)}`);
+fs.writeFileSync(constants.MODEL_JS, `const model = ${JSON.stringify(mlp)};`);
 
 const { samples: testingSamples } = JSON.parse(
   fs.readFileSync(constants.TESTING)
