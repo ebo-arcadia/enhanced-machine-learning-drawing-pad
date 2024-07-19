@@ -100,11 +100,17 @@ featureFunctions.getComplexity = (paths) => {
 featureFunctions.inUse = [
   //{name:"Path Count",function:featureFunctions.getPathCount},
   //{name:"Point Count",function:featureFunctions.getPointCount},
-  { name: "Width", function: featureFunctions.getWidth },
-  { name: "Height", function: featureFunctions.getHeight },
-  { name: "Elongation", function: featureFunctions.getElongation },
-  { name: "Roundness", function: featureFunctions.getRoundness },
-  { name: "Complexity", function: featureFunctions.getComplexity },
+  // { name: "Width", function: featureFunctions.getWidth },
+  // { name: "Height", function: featureFunctions.getHeight },
+  // { name: "Elongation", function: featureFunctions.getElongation },
+  // { name: "Roundness", function: featureFunctions.getRoundness },
+  // { name: "Complexity", function: featureFunctions.getComplexity },
+  {
+    name: "Pixel Array",
+    function: (paths) => {
+      return featureFunctions.getPixels(paths, 20);
+    },
+  },
 ];
 
 if (typeof module !== "undefined") {
